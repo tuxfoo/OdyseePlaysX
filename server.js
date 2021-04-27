@@ -1,47 +1,33 @@
-const tmi = require("tmi.js");
+const WebSocket = require('ws');
 const keyHandler = require("./keyHandler.js");
 const config = require("./config.js");
-
-// https://github.com/tmijs/tmi.js#tmijs
-// for more options
-const client = new tmi.client({
-  connection: {
-    secure: true,
-    reconnect: true,
-  },
-  channels: [config.channel],
-});
+const socket = new WebSocket('wss://comments.lbry.com/api/v2/live-chat/subscribe?subscription_id=8d942740a95b8f212d5e6627a73a6e2943207eb9');
 
 const commandRegex =
   config.regexCommands ||
   new RegExp("^(" + config.commands.join("|") + ")$", "i");
 
-client.on("message", function (channel, tags, message, self) {
-  let isCorrectChannel = `#${config.channel}` === channel;
+// Connection opened
+// Alojz helped with websockets code
+socket.addEventListener('open', function (event) {
+    socket.send('Hello LBRY!');
+});
+
+// Listen for messages
+socket.addEventListener('message', function (event) {
+  var comment=JSON.parse(event.data);
+  var message = comment.data.comment.comment;
+  var userName = comment.data.comment.channel_name;
+  var amount = comment.data.comment.support_amount
+  //let isCorrectChannel = `#${config.channel}` === channel;
   let messageMatches = message.match(commandRegex);
+  //if (self) return;
 
-  if (self) return;
-  if (isCorrectChannel && messageMatches) {
+
+  if (messageMatches) {
     // print username and message to console
-    console.log(`@${tags.username}: ${message}`);
-
+    console.log(userName + ':' + message);
     // send the message to the emulator
-    keyHandler.sendKey(message.toLowerCase());
+    keyHandler.sendKey(message.toLowerCase());   // Important
   }
 });
-
-client.addListener("connected", function (address, port) {
-  console.log("Connected! Waiting for messages..");
-});
-client.addListener("disconnected", function (reason) {
-  console.log("Disconnected from the server! Reason: " + reason);
-});
-
-client.connect();
-if (config.channel === 'twitchplayspokemon') {
-  console.log("");
-  console.log("'twitchplayspokemon' is the default channel! Otherwise, run with the environment variable: ");
-  console.log("TWITCH_CHANNEL=mychannelhere npm start");
-  console.log("");
-}
-console.log(`Connecting to /${config.channel}..`);

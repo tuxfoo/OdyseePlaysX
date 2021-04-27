@@ -1,8 +1,8 @@
 // change these two variables
-let channel = process.env.TWITCH_CHANNEL || "twitchplayspokemon";
+let channel = process.env.CLAIM_ID || "adsdsadsadsa";
 let programName =
-  process.env.CONFIG_PROGRAM_NAME || "VisualBoyAdvance";
-  
+  process.env.CONFIG_PROGRAM_NAME || "visualboyadvance-m";
+
 // List of commands to check for
 let commands = [
   "left",

@@ -1,8 +1,8 @@
-# Twitch Plays X
+# Odysee Plays X
 
 > (inspired by [TwitchPlaysPokemon])
 
-Connect to Twitch's messaging service, (TMI) via [`tmi.js`](https://github.com/tmijs/tmi.js) (previously using IRC) to send inputs to a program and stream it, TwitchPlaysPokemon style. Should support linux/windows/mac.
+Connect to Odysee websocket and sends inputs to a program and stream it, TwitchPlaysPokemon style. Should support linux/windows/mac.
 
 ### In Action
 
@@ -18,10 +18,12 @@ Pokemon Red running in a Ubuntu 13.10 VM
 
 On Windows, the program has to be *focused* in order to send keyboard inputs so you won't be able to use your computer at the same time (unless you run the program in a virtual machine).
 
+On linux I could not get the inputs to forward to the selected window with xdotool, so it had to be active. You can see if it works for you by uncommenting the xdotool command in server.js and commenting out the other one.
+
 ## Installation
 
 - Install [Node.js] (check that you can run node/npm)
-- Clone the repo: `git clone https://github.com/hzoo/TwitchPlaysX.git`
+- Clone the repo: `git clone https://github.com/tuxfoo/OdyseePlaysX`
 - Install `node_modules` in the created folder: `npm install`
 - If Linux: install [xdotool](http://www.semicomplete.com/projects/xdotool/): `apt-get install xdotool`
 - If Windows: install [python] and [python win32] (with corresponding versions)
@@ -29,19 +31,16 @@ On Windows, the program has to be *focused* in order to send keyboard inputs so 
 ## Setup
 
 - Start the program you are going to be sending keys to: (VisualBoyAdvance, Notepad)
-- Append environment variables or modify `config.js` if you need to change the options: `TWITCH_CHANNEL=mychannelhere npm start`
+- Append environment variables or modify `config.js` if you need to change the options: `CLAIM_ID=claimidhere npm start`
 - Run the server with `npm start`
 
 ---
 
 ### Config
 
-- `CONFIG_PROGRAM_NAME`: Find out the title of the window that you will be sending key inputs to (may need to check Task Manager to find out)
-    - Example: `VisualBoyAdvance`, `Desmume`
-        - For `notepad.exe` it would be "Notepad" or "Untitled - Notepad".
-        - If you want to test that the key's are sending correctly, run `npm test` with Notepad opened to see if it sends a key to it.
-- `TWITCH_CHANNEL`: the Twitch channel you want to listen for messages on (`twitchplayspokemon`)
-- Depending on the program, you may need to change the controls (in `defaultKeyMap` in `keyHandler.js`, `keys.py` for windows)
+- change the claim id in the websocket URL in server.js
+- change the program name in config.js
+
 
 ### Misc
 

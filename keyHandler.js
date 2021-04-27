@@ -28,16 +28,16 @@ for (let i = 0; i < throttledCommands.length; i++) {
 }
 
 let defaultKeyMap = config.keymap || {
-  up: "Up",
-  left: "Left",
-  down: "Down",
-  right: "Right",
-  a: "a",
-  b: "b",
-  x: "x",
-  y: "y",
-  start: "s",
-  select: "e",
+  up: "w",
+  down: "s",
+  left: "a",
+  right: "d",
+  a: "l",
+  b: "k",
+  x: "i",
+  y: "o",
+  start: "p",
+  select: "u",
 };
 
 function sendKey(command) {
@@ -63,8 +63,7 @@ function sendKey(command) {
       } else {
         //Send to preset window under non-windows systems
         exec(
-          "xdotool key --window " +
-            windowID +
+          "xdotool key " +
             " --delay " +
             config.delay +
             " " +
